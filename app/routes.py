@@ -1,3 +1,4 @@
+from cgitb import reset
 from flask import render_template, request, jsonify
 from app import app
 from app import database as db_helper
@@ -44,15 +45,26 @@ def create():
     result = {'success': True, 'response': 'Done'}
     return jsonify(result)
 
-@app.route("/login_for",methods=['POST'])
-def login_for():
+@app.route("/login",methods=['POST'])
+def login():
     data = request.get_json()
     current = db_helper.get_accountandpassword(data['account'],data['password'])
-    return current
+    if current == True:
+        items = db_helper.fetch_todo()
+        return index()
+    else:
+        result = {'success': current}
+        return jsonify(result)
 
 @app.route("/")
 def homepage():
     # 返回呈現主頁
-    items = db_helper.fetch_todo()
+    # items = db_helper.fetch_todo()
     # return render_template("index.html", items=items)
-    return render_template("login.html", items=items)
+    return render_template("login.html")
+
+@app.route("/index")
+def index():
+    # 返回呈現主頁
+    items = db_helper.fetch_todo()
+    return render_template("index.html", items=items)

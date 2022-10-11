@@ -56,10 +56,12 @@ def remove_task_by_id(task_id: int) -> None:
 # 檢查帳號密碼
 def get_accountandpassword(acc:str,wd:str) ->None:
     conn = db.connect()
-    query = 'SELECT * from login where account ="{}" and password ="{}" limit 1;'.format(acc,wd)
+    query = 'SELECT * from login where account ="{}" and password ="{}";'.format(acc,wd)
     query_results = conn.execute(query)
     conn.close()
-    if len(query_results.fetchall()) == 0:
-        return False
+    return_data = False
+    if query_results.rowcount == 0:
+        return return_data
     else:
-        return True
+        return_data = True
+        return return_data

@@ -12,4 +12,3 @@ CREATE TABLE tasks (
 );
 INSERT INTO tasks (task, status) VALUES ("task no.1" , "Todo");
 INSERT INTO tasks (task, status) VALUES ("task no.2" , "Todo");
-INSERT INTO tasks (task, status) VALUES ("task no.3" , 

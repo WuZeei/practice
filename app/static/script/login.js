@@ -2,32 +2,31 @@ $(document).ready(function () {
     $('#submit-login').click(function () {
         const loginaccount = $('#login-account').val()
         const loginpassword = $('#login-password').val()
-        if (loginaccount || loginpassword == '') {
+        if ((loginaccount && loginpassword) == '') {
             $('#myModal').modal('show')
             // location.reload();
-        }
-        console.log($('#login-account').val())
-        $.ajax({
-            type: 'POST',
-            url: '/login_for',
-            contentType: 'application/json;charset=UTF-8',
-            data: JSON.stringify({
-                'account': loginaccount,
-                'password': loginpassword
-            }),
-            success: function (res) {
-                console.log(res)
-                if (res = true) {
-                    console.log(res.response)
-                    // location.reload();
-                } else {
-                    $('#myModal').modal('show')
-                    location.reload();
+        } else {
+            console.log($('#login-account').val())
+            $.ajax({
+                type: 'POST',
+                url: '/login',
+                contentType: 'application/json;charset=UTF-8',
+                data: JSON.stringify({
+                    'account': loginaccount,
+                    'password': loginpassword
+                }),
+                success: function (res) {
+                    if (res['success'] == false) {
+                        $('#myModal').modal('show')
+                    } else {
+                        location.replace("index")
+                        // console.log(res)
+                    }
+                },
+                error: function () {
+                    console.log('Error');
                 }
-            },
-            error: function () {
-                console.log('Error');
-            }
-        })
+            })
+        }
     })
 })
