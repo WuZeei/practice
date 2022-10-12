@@ -1,9 +1,9 @@
 $(document).ready(function () {
 
     $('#task-modal').on('show.bs.modal', function (event) {
-        const button = $(event.relatedTarget) 
-        const taskID = button.data('source') 
-        const content = button.data('content') 
+        const button = $(event.relatedTarget)
+        const taskID = button.data('source')
+        const content = button.data('content')
         const modal = $(this)
         if (taskID === 'New Task') {
             modal.find('.modal-title').text(taskID)
@@ -26,13 +26,15 @@ $(document).ready(function () {
         const tID = $('#task-form-display').attr('taskID');
         console.log($('#task-modal').find('.form-control').val())
         const passdata = $('#task-modal').find('.form-control').val();
+        const account = sessionStorage.getItem('account');
         $.ajax({
             type: 'POST',
             // 分建立或是修改
             url: tID ? '/edit/' + tID : '/create',
             contentType: 'application/json;charset=UTF-8',
             data: JSON.stringify({
-                'description': passdata
+                'description': passdata,
+                'account': account
             }),
             success: function (res) {
                 console.log(res.response)
@@ -47,9 +49,14 @@ $(document).ready(function () {
     $('.remove').click(function () {
         // 刪除資料
         const remove = $(this)
+        const account = sessionStorage.getItem('account');
         $.ajax({
             type: 'POST',
             url: '/delete/' + remove.data('source'),
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify({
+                'account': account
+            }),
             success: function (res) {
                 console.log(res.response)
                 location.reload();
@@ -64,6 +71,7 @@ $(document).ready(function () {
         // 取得當前狀態
         const state = $(this)
         const tID = state.data('source')
+        const account = sessionStorage.getItem('account');
         let new_state = "Todo"
         if (state.text() === "In Progress") {
             new_state = "Complete"
@@ -72,13 +80,13 @@ $(document).ready(function () {
         } else if (state.text() === "Todo") {
             new_state = "In Progress"
         }
-
         $.ajax({
             type: 'POST',
             url: '/edit/' + tID,
             contentType: 'application/json;charset=UTF-8',
             data: JSON.stringify({
-                'status': new_state
+                'status': new_state,
+                'account':account
             }),
             success: function (res) {
                 console.log(res)
@@ -90,4 +98,23 @@ $(document).ready(function () {
         });
     });
 
+    $('#logout').click(function () {
+        console.log('click')
+        $.ajax({
+            type: 'POST',
+            url: '/logout',
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify({
+                'status': false
+            }),
+            success: function (res) {
+                console.log(res.response)
+                location.replace("/")
+                sessionStorage.clear()
+            },
+            error: function () {
+                console.log('Error');
+            }
+        })
+    })
 });

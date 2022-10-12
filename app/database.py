@@ -1,9 +1,9 @@
 
 from app import db
 
-def fetch_todo() -> dict:
+def fetch_todo(account: str) -> dict:
     conn = db.connect()
-    query_results = conn.execute("Select * from tasks;").fetchall()
+    query_results = conn.execute('Select * from tasks where account = "{}";'.format(account)).fetchall()
     conn.close()
     todo_list = []
     # 將從資料庫裡的資料分別拆開
@@ -18,24 +18,24 @@ def fetch_todo() -> dict:
     return todo_list
 
 # 更新資料庫
-def update_task_entry(task_id: int, text: str) -> None:
+def update_task_entry(task_id: int, text: str, account:str) -> None:
     conn = db.connect()
-    query = 'Update tasks set task = "{}" where id = {};'.format(text, task_id)
+    query = 'Update tasks set task = "{}" where id = {} and account = "{}";'.format(text, task_id,account)
     conn.execute(query)
     conn.close()
 
 # 更新狀態
-def update_status_entry(task_id: int, text: str) -> None:
+def update_status_entry(task_id: int, text: str, account: str) -> None:
     conn = db.connect()
-    query = 'Update tasks set status = "{}" where id = {};'.format(text, task_id)
+    query = 'Update tasks set status = "{}" where id = {} and account = "{}";'.format(text, task_id,account)
     conn.execute(query)
     conn.close()
 
 # 新增資料
-def insert_new_task(text: str) ->  int:
+def insert_new_task(text: str,account: str) ->  int:
     conn = db.connect()
-    query = 'Insert Into tasks (task, status) VALUES ("{}", "{}");'.format(
-        text, "Todo")
+    query = 'Insert Into tasks (task, status,account) VALUES ("{}", "{}","{}");'.format(
+        text, "Todo",account)
     conn.execute(query)
     # 新增完並取出顯示
     query_results = conn.execute("Select LAST_INSERT_ID();")
@@ -46,10 +46,10 @@ def insert_new_task(text: str) ->  int:
     return task_id
 
 # 刪除資料
-def remove_task_by_id(task_id: int) -> None:
+def remove_task_by_id(task_id: int,account: str) -> None:
     
     conn = db.connect()
-    query = 'Delete From tasks where id={};'.format(task_id)
+    query = 'Delete From tasks where id={} and account = {};'.format(task_id,account)
     conn.execute(query)
     conn.close()
 

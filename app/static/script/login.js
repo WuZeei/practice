@@ -13,12 +13,13 @@ $(document).ready(function () {
                 contentType: 'application/json;charset=UTF-8',
                 data: JSON.stringify({
                     'account': loginaccount,
-                    'password': loginpassword
+                    'password': loginpassword,
                 }),
                 success: function (res) {
                     if (res['success'] == false) {
                         $('#myModal').modal('show')
                     } else {
+                        sessionStorage.setItem('account', loginaccount)
                         location.replace("index")
                         // console.log(res)
                     }
