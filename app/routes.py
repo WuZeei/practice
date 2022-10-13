@@ -1,6 +1,6 @@
 from cgitb import reset
 from this import d
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify ,session
 from app import app
 from app import database as db_helper
 
@@ -30,7 +30,7 @@ def update(task_id):
             db_helper.update_status_entry(task_id, data["status"],data['account'])
             result = {'success': True, 'response': 'Status Updated'}
         elif "description" in data:
-            db_helper.update_task_entry(task_id, data["description"])
+            db_helper.update_task_entry(task_id, data["description"],data['account'])
             result = {'success': True, 'response': 'Task Updated'}
         else:
             result = {'success': True, 'response': 'Nothing Updated'}
@@ -66,7 +66,8 @@ def login():
 @app.route("/index")
 def index():
     # 返回呈現主頁
-
+    # session.get(account)
+    # if len(session.get('account'))>0:
     if current == True:
         items = db_helper.fetch_todo(account)
         return render_template("index.html", items=items)

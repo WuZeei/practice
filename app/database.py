@@ -49,7 +49,7 @@ def insert_new_task(text: str,account: str) ->  int:
 def remove_task_by_id(task_id: int,account: str) -> None:
     
     conn = db.connect()
-    query = 'Delete From tasks where id={} and account = {};'.format(task_id,account)
+    query = 'Delete From tasks where id={} and account = "{}";'.format(task_id,account)
     conn.execute(query)
     conn.close()
 
