@@ -8,7 +8,9 @@ CREATE TABLE tasks (
     id int NOT NULL AUTO_INCREMENT,
     task varchar(255) NOT NULL,
     status char(30),
+    password varchar(255) NOT NULL,
     PRIMARY KEY (`id`)
 );
+INSERT INTO login(account,password) VALUES ("root","asdzxc")
 INSERT INTO tasks (task, status) VALUES ("task no.1" , "Todo");
 INSERT INTO tasks (task, status) VALUES ("task no.2" , "Todo");
