@@ -1,5 +1,4 @@
 from cgitb import reset
-from this import d
 from flask import render_template, request, jsonify ,session
 from app import app
 from app import database as db_helper
@@ -90,3 +89,4 @@ def homepage():
     # items = db_helper.fetch_todo()
     # return render_template("index.html", items=items)
     return render_template("login.html")
+
